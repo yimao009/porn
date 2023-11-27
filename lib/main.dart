@@ -65,6 +65,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      onChanged: _updateFormProgress,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -111,7 +112,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     : Colors.blue;
               },
             )),
-            onPressed: showWelcomeScreen,
+            onPressed: _formProgress == 1 ? showWelcomeScreen : null,
             child: const Text('Sign up'),
           ),
         ],
