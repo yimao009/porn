@@ -61,10 +61,15 @@ class _SignUpFormState extends State<SignUpForm> {
   final _firstNameTextController = TextEditingController();
   final _lastNameTextController = TextEditingController();
   final _usernameTextController = TextEditingController();
+  final _emailTextController = TextEditingController();
+  final _passwordTextController = TextEditingController();
   double _formProgress = 0;
+
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: formKey,
       onChanged: _updateFormProgress,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -91,8 +96,28 @@ class _SignUpFormState extends State<SignUpForm> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter User Name';
+                }
+                return null;
+              },
               controller: _usernameTextController,
               decoration: const InputDecoration(hintText: 'User Name'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextFormField(
+              controller: _emailTextController,
+              decoration: const InputDecoration(hintText: 'email'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextFormField(
+              controller: _passwordTextController,
+              decoration: const InputDecoration(hintText: 'password'),
             ),
           ),
           TextButton(
@@ -110,7 +135,16 @@ class _SignUpFormState extends State<SignUpForm> {
                     : Colors.blue;
               },
             )),
-            onPressed: _formProgress == 1 ? showWelcomeScreen : null,
+            // onPressed: _formProgress == 1 ? showWelcomeScreen : null,
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Processing Data'),
+                  ),
+                );
+              }
+            },
             child: const Text('Sign up'),
           ),
         ],
